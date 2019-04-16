@@ -8,11 +8,11 @@ import { addTodo, toggleTodo } from "./actions";
 
 import logger from "./utils/logger.js";
 
-const store = createStore(rootReducer, [], applyMiddleware(logger));
-
-// store.subscribe(() => {
-//   console.log(store.getState());
-// });
+const store = createStore(
+  rootReducer,
+  { filter: "ALL", todos: [], filteredTodos: [] },
+  applyMiddleware(logger)
+);
 
 store.dispatch(addTodo("My Todo"));
 store.dispatch(addTodo("Second Todo"));
