@@ -1,11 +1,31 @@
+// @flow
+
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
 import { toggleTodo, removeTodo, addTodo, filterTodo } from "../actions/index";
 import { filters } from "../const/filters";
+import { Filter } from "../flowTypes/filters.js";
+import { Todo } from "../flowTypes/todo.js";
 
-class Index extends Component {
+
+type Props = {
+  todos: Array<Todo>,
+  filter: Filter,
+  length: number,
+
+};
+
+const style = {
+  aButton: {
+    display: "inline",
+    textDecoration: "underline",
+    border: "none",
+    background: "none",
+  },
+};
+
+class Index extends Component<Props> {
   constructor(props) {
     super(props);
     this.onKeypress = this.onKeypress.bind(this);
@@ -35,22 +55,26 @@ class Index extends Component {
             </label>
           ))}
         </div>
-        {Object.keys(this.props.todos).map((id) => {
+        {Object.keys(this.props.todos).map(id => {
           return (
-          <div key={id}>
-            <span onClick={this.props.toggleTodo.bind(this, id)}>
-              <input
-                type="checkbox"
-                checked={this.props.todos[id].isCompleted ? "checked" : ""}
-                className="checkbox"
-              />
-              {this.props.todos[id].text}
-            </span>
-            (<a href="#" onClick={this.props.removeTodo.bind(this, id)}>
-              Убрать
-            </a>)
-          </div>
-        )})}
+            <div key={id}>
+              <span onClick={this.props.toggleTodo.bind(this, id)}>
+                <input
+                  type="checkbox"
+                  checked={this.props.todos[id].isCompleted ? "checked" : ""}
+                  className="checkbox"
+                />
+                {this.props.todos[id].text}
+              </span>
+              (<button
+                style={style.aButton}
+                onClick={this.props.removeTodo.bind(this, id)}
+              >
+                Убрать
+              </button>)
+            </div>
+          );
+        })}
 
         <div>
           <input
@@ -64,16 +88,6 @@ class Index extends Component {
   }
 }
 
-Index.propTypes = {
-  todos: PropTypes.arrayOf(
-    PropTypes.shape({
-      text: PropTypes.string,
-      isCompleted: PropTypes.bool
-    })
-  ),
-  filter: PropTypes.oneOf(["ALL", "UNCOMPLETED", "COMPLETED"]),
-  length: PropTypes.number
-};
 
 const mapStateToProps = state => {
   const filteredTodo = {};
@@ -85,7 +99,7 @@ const mapStateToProps = state => {
   return {
     todos: filteredTodo,
     filter: state.filter,
-    length: state.todos.length
+    length: state.todos.length,
   };
 };
 const mapDispatchToProps = { toggleTodo, removeTodo, addTodo, filterTodo };
