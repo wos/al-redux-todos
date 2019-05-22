@@ -8,7 +8,7 @@ import {
 import { State } from "../flowTypes/state.js";
 import { Action } from "../flowTypes/actions.js";
 
-const todos = (state: State = { todos: [] }, action: Action) => {
+const todos = (state: State, action: Action) => {
   let nextState = JSON.parse(JSON.stringify(state));
   switch (action.type) {
     case ADD_TODO:
